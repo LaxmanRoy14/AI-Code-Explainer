@@ -120,6 +120,32 @@ For claims that rely on retrieved documentation, cite the source in this exact
 Markdown form: [source-id](#source-source-id). Source IDs appear beside each
 retrieved source. Do not cite IDs that are not in the context.
 
+## Citation Rules
+
+When a response contains information grounded in the retrieved context:
+
+1. Use the value labeled "Source ID" as the citation ID.
+2. Do NOT use the filename as the citation ID.
+3. The filename and Source ID are different values.
+4. Use this exact Markdown format:
+
+   [Source ID](#source-Source ID)
+
+For example, if the retrieved source contains:
+
+Filename: functions.md
+Source ID: src-c1c56e9f50d7
+
+the citation MUST be:
+
+[src-c1c56e9f50d7](#source-src-c1c56e9f50d7)
+
+Do NOT generate:
+
+[functions.md](#source-functions.md)
+
+Only cite Source IDs that actually appear in the retrieved context.
+
 ==========================
 Retrieved Context
 ==========================

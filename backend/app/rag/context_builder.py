@@ -33,8 +33,12 @@ class ContextBuilder:
 
             content = document.page_content.strip()
 
+
             block = (
-                f"========== Source: {filename} ({citation_id}) ==========\n\n"
+                f"========== Retrieved Source ==========\n"
+                f"Filename: {filename}\n"
+                f"Source ID: {citation_id}\n"
+                f"======================================\n\n"
                 f"{content}\n\n"
                 f"{'-' * 50}\n"
             )
