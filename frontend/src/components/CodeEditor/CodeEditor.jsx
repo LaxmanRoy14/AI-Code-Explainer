@@ -6,7 +6,6 @@ import "./CodeEditor.css";
 import {
   analyzeCode,
   analyzeCodeStream,
-  analyzeConversation,
 } from "../../services/api";
 
 import { useTheme } from "../../context/ThemeContext";
@@ -17,9 +16,7 @@ function CodeEditor({
   onResponse,
   loading,
   setLoading,
-  sessionId,
-  onSessionId,
-  onResetConversation,
+  setStreaming,
 }) {
   const [code, setCode] = useState(`# Write your Python code here
 
@@ -30,7 +27,6 @@ greet("Alice")
 `);
 
   const { theme } = useTheme();
-  const [mode, setMode] = useState("analysis");
   const [streamResponse, setStreamResponse] = useState(false);
 
   const handleAnalyze = async () => {
@@ -43,10 +39,8 @@ greet("Alice")
       setLoading(true);
 
       let result;
-      if (mode === "conversation") {
-        result = await analyzeConversation(code, sessionId);
-        onSessionId(result.session_id);
-      } else if (streamResponse) {
+      if (streamResponse) {
+        setStreaming(true);
         onResponse({ answer: "", sources: [], source_details: [] });
         let streamError = null;
         await analyzeCodeStream(code, {
@@ -89,6 +83,7 @@ greet("Alice")
         showError("Unable to connect to the backend.");
       }
     } finally {
+      setStreaming(false);
       setLoading(false);
     }
   };
@@ -96,7 +91,6 @@ greet("Alice")
   const handleClear = () => {
     setCode("");
     onResponse(null);
-    onResetConversation();
   };
 
   const handleEditorDidMount = (editor, monaco) => {
@@ -119,37 +113,25 @@ greet("Alice")
             <option value="python">Python</option>
           </select>
 
-          <select
-            aria-label="Response mode"
-            className="language-select"
-            value={mode}
-            onChange={(event) => setMode(event.target.value)}
-            disabled={loading}
-          >
-            <option value="analysis">One-off analysis</option>
-            <option value="conversation">Follow-up chat</option>
-          </select>
         </div>
 
         <div className="toolbar-right">
-          {mode === "analysis" && (
-            <label className="stream-toggle">
-              <input
-                type="checkbox"
-                checked={streamResponse}
-                onChange={(event) => setStreamResponse(event.target.checked)}
-                disabled={loading}
-              />
-              Stream
-            </label>
-          )}
+          <label className="stream-toggle">
+            <input
+              type="checkbox"
+              checked={streamResponse}
+              onChange={(event) => setStreamResponse(event.target.checked)}
+              disabled={loading}
+            />
+            Stream
+          </label>
           <button
             className="analyze-btn"
             onClick={handleAnalyze}
             disabled={loading}
             aria-label="Analyze Python code"
           >
-            {loading ? "Analyzing..." : mode === "conversation" ? "Send Follow-up" : "Analyze Code"}
+            {loading ? "Analyzing..." : "Analyze Code"}
           </button>
 
           <button

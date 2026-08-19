@@ -17,10 +17,11 @@ export const analyzeCode = async (code) => {
   return response.data;
 };
 
-export const analyzeConversation = async (question, sessionId) => {
+export const analyzeConversation = async (question, sessionId, promptStyle = "zero_shot") => {
   const response = await api.post("/chat/conversation", {
     question,
     session_id: sessionId || undefined,
+    prompt_style: promptStyle,
   });
   return response.data;
 };

@@ -787,9 +787,12 @@ The application also provides several productivity features:
 - Responsive interface
 - Optional streaming responses: enable **Stream** before analysis to render
   generated text as it arrives.
-- Follow-up chat: switch the editor mode to **Follow-up chat**; the backend
-  keeps the latest eight turns for the active browser session. This memory is
+- Follow-up chat: use the **Chatbot** page from the navigation bar. The backend keeps the
+  latest eight turns for the active browser session. This memory is
   process-local and is cleared when the backend restarts.
+- Chatbot response styles: choose **Zero-shot Q&A** for direct answers,
+  **One-shot analogy** for an explanation with a useful analogy, or **Deep
+  explanation** for a structured reasoning summary and trade-offs.
 
 ### API extensions
 
@@ -798,7 +801,8 @@ also include an additive `source_details` field with a stable citation ID,
 category, chunk ID, and excerpt. Model citations link to those displayed
 source excerpts.
 
-- `POST /chat/conversation` accepts `question` and an optional `session_id`,
+- `POST /chat/conversation` accepts `question`, an optional `session_id`, and
+  an optional `prompt_style` (`zero_shot`, `one_shot`, or `deep_reasoning`),
   returning the session ID with the normal response fields.
 - `POST /chat/stream` accepts the normal chat request and emits Server-Sent
   Events: `meta`, `token`, `done`, or `error`.

@@ -125,6 +125,7 @@ def conversation(request: ConversationRequest):
             user_input=request.question,
             context=context,
             history=conversation_store.history(session_id),
+            prompt_style=request.prompt_style,
         )
         answer = LLMService().generate_response(prompt)
         conversation_store.append(session_id, "user", request.question)

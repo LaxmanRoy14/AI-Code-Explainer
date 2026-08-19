@@ -165,9 +165,11 @@ User Code
         user_input: str,
         context: str,
         history: str,
+        prompt_style: str = "zero_shot",
     ) -> str:
         """Builds a follow-up prompt while preserving the existing RAG rules."""
 
+        style_instruction = PromptManager._conversation_style_instruction(prompt_style)
         base_prompt = PromptManager.build_prompt(input_type, user_input, context)
         return f"""{base_prompt}
 
@@ -179,4 +181,29 @@ Conversation History
 
 Use the history only to resolve follow-up references. Treat the latest user
 input as the request to answer. Do not repeat prior answers unnecessarily.
+
+==========================
+Response Style
+==========================
+
+{style_instruction}
 """
+
+    @staticmethod
+    def _conversation_style_instruction(prompt_style: str) -> str:
+        """Constrain the visible response style without requesting hidden reasoning."""
+        if prompt_style == "one_shot":
+            return """Use an explanatory analogy where it improves understanding.
+Follow this compact example pattern once when relevant:
+Concept: a Python list
+Analogy: a labelled shelf that can grow and change.
+Then apply the same concept-and-analogy format to the user's question."""
+
+        if prompt_style == "deep_reasoning":
+            return """Give a rigorous, user-facing explanation with: assumptions,
+a concise step-by-step solution outline, trade-offs, and a final recommendation.
+Do not reveal private chain-of-thought or hidden reasoning; provide only the
+useful, verifiable reasoning summary the user needs."""
+
+        return """Answer directly with no supplied examples. Be concise, accurate,
+and use the retrieved context for factual claims. This is a zero-shot Q&A response."""
