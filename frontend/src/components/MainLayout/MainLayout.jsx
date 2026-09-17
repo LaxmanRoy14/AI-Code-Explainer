@@ -8,7 +8,7 @@ import ResponsePanel from "../ResponsePanel/ResponsePanel";
 function MainLayout() {
   const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [sessionId, setSessionId] = useState(null);
+  const [streaming, setStreaming] = useState(false);
 
   return (
     <section className="main-layout">
@@ -21,9 +21,7 @@ function MainLayout() {
           onResponse={setResponse}
           loading={loading}
           setLoading={setLoading}
-          sessionId={sessionId}
-          onSessionId={setSessionId}
-          onResetConversation={() => setSessionId(null)}
+          setStreaming={setStreaming}
         />
       </div>
 
@@ -35,6 +33,7 @@ function MainLayout() {
         <ResponsePanel
           response={response}
           loading={loading}
+          streaming={streaming}
         />
       </div>
     </section>

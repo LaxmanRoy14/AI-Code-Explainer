@@ -10,8 +10,8 @@ import DownloadButton from "../DownloadButton/DownloadButton";
 
 import { FiCode, FiAlertCircle } from "react-icons/fi";
 
-function ResponsePanel({ response, loading }) {
-  if (loading) {
+function ResponsePanel({ response, loading, streaming }) {
+  if (loading && !streaming) {
     return <LoadingSpinner />;
   }
 
